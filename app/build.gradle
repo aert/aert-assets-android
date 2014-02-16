@@ -31,5 +31,6 @@ android {
 
 dependencies {
     compile 'com.android.support:support-v4:+'
+    compile 'org.roboguice:roboguice:2.0'
     compile fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
 }
