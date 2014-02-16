@@ -1,16 +1,17 @@
 package fr.aert.assets.app;
 
 
-import android.app.Activity;
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.Fragment;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.TypedArray;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,6 +22,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+
+import fr.aert.assets.app.adapter.NavDrawerListAdapter;
+import fr.aert.assets.app.model.NavDrawerItem;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -58,6 +64,19 @@ public class NavigationDrawerFragment extends Fragment {
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
 
+    // slide menu items
+    private String[] navMenuTitles;
+    private TypedArray navMenuIcons;
+
+    private ArrayList<NavDrawerItem> navDrawerItems;
+    private NavDrawerListAdapter adapter;
+
+    // constants
+    public static final int DRAWER_DASHBOARD = 0;
+    public static final int DRAWER_INVOICES = 1;
+    public static final int DRAWER_EARNINGS = 2;
+    public static final int DRAWER_SPENDINGS = 3;
+
     public NavigationDrawerFragment() {
     }
 
@@ -80,7 +99,7 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated (Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // Indicate that this fragment would like to influence the set of actions in the action bar.
         setHasOptionsMenu(true);
@@ -88,7 +107,7 @@ public class NavigationDrawerFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         mDrawerListView = (ListView) inflater.inflate(
                 R.layout.fragment_navigation_drawer, container, false);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -97,16 +116,35 @@ public class NavigationDrawerFragment extends Fragment {
                 selectItem(position);
             }
         });
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
-                getActionBar().getThemedContext(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                new String[]{
-                        getString(R.string.title_section_dashboard),
-                        getString(R.string.title_section_invoices),
-                        getString(R.string.title_section_earnings),
-                        getString(R.string.title_section_spendings),
-                }));
+
+        // load slide menu items
+        navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
+        // nav drawer icons from resources
+        navMenuIcons = getResources().obtainTypedArray(R.array.nav_drawer_icons);
+        navDrawerItems = new ArrayList<NavDrawerItem>();
+
+        for (int i = 0; i < navMenuTitles.length; i++) {
+            String title = navMenuTitles[i];
+            int iconId = navMenuIcons.getResourceId(i, -1);
+
+            String counterMsg = "";
+            if (i == DRAWER_INVOICES)
+                counterMsg = "22";
+            else if (i == DRAWER_SPENDINGS)
+                counterMsg = "50+";
+
+            NavDrawerItem item = new NavDrawerItem(title, iconId, !counterMsg.equals(""), counterMsg);
+            navDrawerItems.add(item);
+        }
+
+        // Recycle the typed array
+        navMenuIcons.recycle();
+
+        // setting the nav drawer list adapter
+        adapter = new NavDrawerListAdapter(getActionBar().getThemedContext(), navDrawerItems);
+        mDrawerListView.setAdapter(adapter);
+
+
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
     }

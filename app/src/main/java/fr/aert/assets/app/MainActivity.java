@@ -1,17 +1,16 @@
 package fr.aert.assets.app;
 
-import android.app.Activity;
-
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v4.widget.DrawerLayout;
 import android.widget.TextView;
 
 public class MainActivity extends Activity
@@ -52,20 +51,11 @@ public class MainActivity extends Activity
     }
 
     public void onSectionAttached(int number) {
-        switch (number) {
-            case 1:
-                mTitle = getString(R.string.title_section_dashboard);
-                break;
-            case 2:
-                mTitle = getString(R.string.title_section_invoices);
-                break;
-            case 3:
-                mTitle = getString(R.string.title_section_earnings);
-                break;
-            case 4:
-                mTitle = getString(R.string.title_section_spendings);
-                break;
-        }
+        String[] navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
+        number--;
+
+        if (number >= 0 && number < navMenuTitles.length)
+            mTitle = navMenuTitles[number];
     }
 
     public void restoreActionBar() {
@@ -128,7 +118,7 @@ public class MainActivity extends Activity
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
+                                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
