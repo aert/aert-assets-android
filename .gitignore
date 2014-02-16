@@ -3,5 +3,6 @@
 /.idea/workspace.xml
 .DS_Store
 /app/build
-/.idea
-
+/.idea/workspace.xml
+/.idea/tasks.xml
+*.iws
