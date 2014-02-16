@@ -23,6 +23,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.androidannotations.annotations.EFragment;
+
 import java.util.ArrayList;
 
 import fr.aert.assets.app.adapter.NavDrawerListAdapter;
@@ -33,6 +35,7 @@ import fr.aert.assets.app.model.NavDrawerItem;
  * See the <a href="https://developer.android.com/design/patterns/navigation-drawer.html#Interaction">
  * design guidelines</a> for a complete explanation of the behaviors implemented here.
  */
+@EFragment
 public class NavigationDrawerFragment extends Fragment {
 
     /**
