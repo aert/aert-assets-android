@@ -4,13 +4,8 @@ buildscript {
     repositories {
         mavenCentral()
     }
-
-
     dependencies {
         classpath 'com.android.tools.build:gradle:0.8.+'
-
-        // Android Annotations
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.1'
     }
 }
 

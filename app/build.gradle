@@ -1,25 +1,5 @@
 apply plugin: 'android'
 
-// ////////////////////////////
-// Android Annotations -- start
-apply plugin: 'android-apt'
-def AAVersion = '3.0.1'
-
-dependencies {
-    apt "org.androidannotations:androidannotations:$AAVersion"
-    compile "org.androidannotations:androidannotations-api:$AAVersion"
-}
-
-apt {
-    arguments {
-        androidManifestFile variant.processResources.manifestFile 
-        resourcePackageName 'fr.aert.assets.app'
-    }
-}
-// Android Annotations -- end
-// ////////////////////////////
-
-
 android {
     compileSdkVersion 19
     buildToolsVersion "19.0.1"
